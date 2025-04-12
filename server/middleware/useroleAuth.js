@@ -7,7 +7,6 @@ export const useroleAuth = (req, res, next) =>{
       return res.status(401).json({message:"userole not autherised",success: false});
     } 
     const tokenVerified = jwt.verify(token,process.env.JWT_SECRET_KEY);
-
     if(!tokenVerified){
       return res.status(401).json({message:"userole not autherised", success:false});
     }
@@ -19,5 +18,12 @@ export const useroleAuth = (req, res, next) =>{
   }
 };
 
-
+export const authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Access denied: insufficient permissions" });
+    }
+    next();
+  };
+};
 

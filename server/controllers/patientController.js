@@ -1,7 +1,27 @@
  import {Patient} from'../models/patientmodel.js';
+import { genarateToken } from '../utils/token.js';
 
 // Create a new patient
-export const createPatient = async (req, res, next) => {
+ export const createPatient = async (req, res, next) => {
+  const { name, age, gender, contactInfo, medicalHistory, assignedDoctor, appointments } = req.body;
+  try {
+    const patient = new Patient({ name, age, gender, contactInfo, medicalHistory, assignedDoctor, appointments });
+    await patient.save();
+
+     const token = genarateToken(patient);  // Only needed if you want to log them in or send token back
+
+    res.status(201).cookie("token", token, { httpOnly: true }).json({
+      message: 'Patient created successfully',
+      patient,
+      token
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'Error creating patient', error });
+  }
+}; 
+
+/* export const createPatient = async (req, res, next) => {
   const { name, age, gender, contactInfo, medicalHistory, assignedDoctor, appointments } = req.body;
   try {
     const patient = new Patient({ name, age, gender, contactInfo, medicalHistory, assignedDoctor, appointments });
@@ -11,8 +31,7 @@ export const createPatient = async (req, res, next) => {
     console.error(error);
     res.status(400).json({ message: 'Error creating patient', error });
   }
-};
-
+}; */
 // Get all patients
 export const getAllPatients = async (req, res,next) => {
   try {
