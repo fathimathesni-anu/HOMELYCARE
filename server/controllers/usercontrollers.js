@@ -4,6 +4,23 @@ import { genarateToken } from "../utils/token.js";
 
 const NODE_ENV = process.env.NODE_ENV || "development"; // Make sure this is defined
 
+export const uploadProfilePic = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const profilePicUrl = `/uploads/profilePics/${req.file.filename}`;
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: profilePicUrl },
+      { new: true }
+    );
+
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ message: "Upload failed", error: error.message });
+  }
+};
+
 export const userSignup = async (req, res, next) => {
   try {
     console.log("Signup route hit");

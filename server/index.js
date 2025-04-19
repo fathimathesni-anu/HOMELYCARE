@@ -15,13 +15,17 @@ connectDB();
 // Middleware
 app.use(express.json());
 
+
+
 app.use(cors({
-  origin: ["*"], // Or specify exact domains in production
+  origin: ["http://localhost:5173"], // Or specify exact domains in production
   methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
   credentials: true,
 }));
 
 app.use(cookieParser());
+
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.get("/", (req, res) => {
