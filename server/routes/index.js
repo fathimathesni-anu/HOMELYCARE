@@ -11,6 +11,8 @@ import {chatRouter} from "./chatRoutes.js"
 import { feedbackRouter } from './feedbackRoutes.js';
 import {notificationRouter} from './notificationRoutes.js'
 import {appointmentScheduleRouter} from "./AppointmentScheduleRoutes.js";
+import {staffRouter} from './staffRoutes.js'
+import {taskRouter} from './taskRoutes.js'
 router.use("/user",userRouter);
 router.use("/userole",useroleRouter)
 router.use("/patient",patientRouter) 
@@ -22,4 +24,6 @@ router.use("/bloodbank",bloodBankRouter)
 router.use("/chat",chatRouter)
 router.use("/feedback",feedbackRouter)
 router.use("/notification",notificationRouter)
+router.use("/staff",staffRouter)
+router.use("/task",taskRouter)
 export {router as apiRouter}
