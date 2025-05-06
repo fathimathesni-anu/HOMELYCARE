@@ -3,9 +3,27 @@ import bcrypt from "bcrypt";
 import { genarateToken } from "../utils/token.js";
 const NODE_ENV = process.env.NODE_ENV || "development";
 
+
+export const uploadProfilePic = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const profilePicUrl = `/uploads/profilePics/${req.file.filename}`;
+
+    const user = await Userole.findByIdAndUpdate(
+      userId,
+      { profilePic: profilePicUrl },
+      { new: true }
+    );
+
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ message: "Upload failed", error: error.message });
+  }
+};
+
 export const useroleSignup = async (req, res, next) => {
   try {
-    console.log("Signup route hit");
+    console.log("Signup userole route hit");
     const { name, email, password, mobile, profilepic, role } = req.body;
 
     // ✅ Validate required fields
@@ -51,7 +69,14 @@ export const useroleSignup = async (req, res, next) => {
       httpOnly: true,
     });
 
-    return res.json({ success: true, message: "User account created successfully" });
+   /*  return res.json({ success: true, message: "User account created successfully" }); */
+   return res.json({
+    success: true,
+    message: "User account created successfully",
+    token,
+    role: newuserole.role, // important for navigation
+  });
+  
 
   } catch (error) {
     console.error(error);
@@ -64,7 +89,7 @@ export const useroleSignup = async (req, res, next) => {
 
 export const useroleLogin = async (req, res, next) => {
   try {
-    console.log("login route hit");
+    console.log("login userole route hit");
 
     const { email, password: plainPassword, role } = req.body;
 

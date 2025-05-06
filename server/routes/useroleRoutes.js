@@ -2,11 +2,13 @@ import express from "express";
 import { useroleSignup, useroleLogin,useroleProfile,useroleLogout } from "../controllers/userolecontrollers.js";
 import { useroleAuth } from "../middleware/useroleAuth.js";
 import { authorizeRoles } from "../middleware/authorizeRole.js";
-
+import { upload } from "../middleware/upload.js";
+import { uploadProfilePic } from "../controllers/userolecontrollers.js";
 
 const router = express.Router();
 
 // Public routes
+router.post("/upload-profile-pic", useroleAuth, upload.single("profilePic"), uploadProfilePic);
 router.post("/signup", useroleSignup);
 router.put("/login", useroleLogin);
 router.get("/profile",useroleAuth,useroleProfile);

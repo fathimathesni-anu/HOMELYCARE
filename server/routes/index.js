@@ -1,6 +1,6 @@
 import e from "express";
 const router = e.Router();
-import {userRouter} from './userRoutes.js'
+import {userRouter} from './userRoutes.js';
 import { useroleRouter } from "./useroleRoutes.js";
 import { patientRouter } from "./patientRoutes.js"; 
 import { appoinmentRouter } from "./appoinmentRoutes.js";

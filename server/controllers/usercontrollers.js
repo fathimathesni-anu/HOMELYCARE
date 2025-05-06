@@ -73,7 +73,7 @@ export const userSignup = async (req, res, next) => {
   }
 };
 
-export const userLogin = async (req, res, next) => {
+/* export const userLogin = async (req, res, next) => {
   try {
     console.log("login route hit");
     const { email, password } = req.body;
@@ -119,6 +119,47 @@ export const userLogin = async (req, res, next) => {
     return res.status(error.statusCode || 500).json({
       message: error.message || "Internal server error"
     });
+  }
+}; */
+
+
+export const userLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 🔍 Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 🔐 Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+
+    // 🍪 Generate and set token cookie
+    const token = genarateToken(user._id);
+    res.cookie("token", token, {
+      sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      secure: NODE_ENV === "production",
+      httpOnly: true,
+    });
+
+    // ✅ Return user data with implicit role
+    const userData = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+      profilepic: user.profilepic,
+      role: "user", // 👈 Important for frontend redirect
+    };
+
+    return res.status(200).json({
+      message: "Login successful",
+      data: userData,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 

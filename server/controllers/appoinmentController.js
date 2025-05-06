@@ -36,7 +36,11 @@ export const createAppointment = async (req, res, next) => {
 // Get all appointments
 export const getAllAppointments = async (req, res, next) => {
   try {
-    const appointments = await Appointment.find()
+    const filter = {};
+    if (req.query.doctorId) {
+      filter.doctorId = req.query.doctorId;
+
+    } const appointments = await Appointment.find(filter)
       .populate('patientId')
       .populate('doctorId');
 

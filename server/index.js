@@ -18,7 +18,7 @@ app.use(express.json());
 
 
 app.use(cors({
-  origin: ["http://localhost:5173"], // Or specify exact domains in production
+  origin: ["http://localhost:5173","http://localhost:5174"], // Or specify exact domains in production
   methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
   credentials: true,
 }));
@@ -34,7 +34,8 @@ app.get("/", (req, res) => {
 
  app.use("/api", apiRouter)
 
-const port = 3000;
+
+const port = 5000;
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
