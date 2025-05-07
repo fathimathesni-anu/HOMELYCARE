@@ -73,56 +73,6 @@ export const userSignup = async (req, res, next) => {
   }
 };
 
-/* export const userLogin = async (req, res, next) => {
-  try {
-    console.log("login route hit");
-    const { email, password } = req.body;
-
-    // ✅ Validate required fields
-    if (!email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    // ❌ Typo fix: findone → findOne
-    const UserExist = await User.findOne({ email });
-
-    if (!UserExist) {
-      return res.status(400).json({ message: "User does not exist" });
-    }
-
-    // ✅ Hash password
-    const passwordMatch = bcrypt.compareSync(password, UserExist.password);
-
-    if (!passwordMatch) {
-      return res.status(401).json({ message: "user not authenticated" });
-    }
-
-    // ✅ Generate token
-    const token = genarateToken(UserExist._id);
-
-    // ✅ Set cookie
-    // res.cookie("token", token);
-    res.cookie("token", token, {
-      sameSite: NODE_ENV === "production" ? "None" : "Lax",
-      secure: NODE_ENV === "production",
-      httpOnly: true,
-    });
-
-    //delete UserExist.doc.password;
-    {
-      const { password, ...userDataWithoutpassword } = UserExist._doc;
-      return res.json({ data: userDataWithoutpassword, message: "user login sucuess" });
-    }
-
-  } catch (error) {
-    console.error("Login error:", error);
-    return res.status(error.statusCode || 500).json({
-      message: error.message || "Internal server error"
-    });
-  }
-}; */
-
-
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
